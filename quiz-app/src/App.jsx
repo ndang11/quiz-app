@@ -1,65 +1,25 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import QuestionPage from './components/QuestionPage';
-import ResultsPage from './components/ResultsPage';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import ResultsPage from './pages/ResultPage';
+import QuestionPage from './pages/QuestionPage';
+import { UseData } from './context/context';
 
-export default class App extends Component {
-  state = {
-    questions: [],
-    answers: [],
-    currentQuestionIndex: 0,
-    gameStarted: false,
-    results: null
-  };
-
-  startGame = () => {
-    this.setState({ gameStarted: true });
-  };
-
-  handleAnswer = (answer) => {
-    const { questions, answers, currentQuestionIndex } = this.state;
-    const newAnswers = [...answers, { question: questions[currentQuestionIndex], answer }];
-    if (currentQuestionIndex + 1 < questions.length) {
-      this.setState({ answers: newAnswers, currentQuestionIndex: currentQuestionIndex + 1 });
-    } else {
-      // Calculate results here if needed
-      this.setState({ answers: newAnswers, gameStarted: false, results: newAnswers });
-    }
-  };
-
-  getQuestions = (questions) => {
-    this.setState({ questions });
-  };
-
-  render() {
-    const { questions, currentQuestionIndex, gameStarted, answers, results } = this.state;
-    return (
-      <Router>
+function App() {
+  return (
+    <UseData>
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={
-            <LandingPage startGame={this.startGame} questions={questions} getQuestions={this.getQuestions} />
-          } />
-          <Route path="/question/:index" element={
-            questions.length > 0 ? (
-              <QuestionPage
-                questions={questions}
-                currentQuestionIndex={currentQuestionIndex}
-                handleAnswer={this.handleAnswer}
-              />
-            ) : (
-              <Navigate to="/" />
-            )
-          } />
-          <Route path="/results" element={
-            results ? (
-              <ResultsPage answers={answers} restart={() => this.setState({ questions: [], answers: [], currentQuestionIndex: 0, gameStarted: false, results: null })} />
-            ) : (
-              <Navigate to="/" />
-            )
-          } />
+          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/QuestionPage/:number"
+            element={<QuestionPage/>}
+          />
+          <Route path="/ResultPage" element={<ResultsPage />} />
         </Routes>
-      </Router>
-    );
-  }
+      </BrowserRouter>
+    </UseData>
+  );
 }
+
+export default App;
