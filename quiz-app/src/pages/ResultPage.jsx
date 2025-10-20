@@ -88,15 +88,15 @@ export default function ResultsPage() {
             </p>
             <p className={styles.scores2}>Your Score: <strong>{scorePercentage}%</strong></p>
 
-            <h2 className={styles.title}>Question Breakdown:</h2>
-            <ul>
+            <h2 className={styles.title}>Quiz Summary:</h2>
+            <ul className={styles.list}>
                 {questions.map((q, index) => (
                     <li key={index}>
                         <p>
                             <strong>Q{index + 1}:</strong> {q.text}
                         </p>
-                        <p>
-                            <strong>Your answer:</strong>{" "}
+                        <p className={styles.answer}>
+                            <strong className={styles.ans1}>Your answer:</strong>{" "}
                             {q.answer === null
                                 ? "No answer"
                                 : q.answer
@@ -104,13 +104,13 @@ export default function ResultsPage() {
                                     : "False"}
                         </p>
                         <p>
-                            <strong>Correct answer:</strong> {q.correct ? "True" : "False"}
+                            <strong className={styles.ans1}>Correct answer:</strong> {q.correct ? "True" : "False"}
                         </p>
                     </li>
                 ))}
             </ul>
 
-            <button onClick={() => navigate("/")}>Play Again</button>
+            <button className={styles.btn} onClick={() => navigate("/")}>Play Again</button>
         </div>
     );
 }

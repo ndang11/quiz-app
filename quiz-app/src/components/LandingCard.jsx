@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./LandingCard.module.css";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../context/context";
+import he from "he";
 
 export function LandingCard({ isLoading }) {
   const navigate = useNavigate();
@@ -19,9 +20,9 @@ export function LandingCard({ isLoading }) {
 
       // Map API data into our format
       const questions = json.results.map((q) => ({
-        text: q.question,
-        correct: q.correct_answer === "True", // store the correct answer
-        answer: null, // user answer to be filled later
+        text: he.decode(q.question), // 👈 convert &quot; etc. to plain text
+        correct: q.correct_answer === "True",
+        answer: null,
       }));
 
       setData(questions); // store in context
@@ -60,7 +61,7 @@ export function LandingCard({ isLoading }) {
             </li>
           </ol>
 
-          {/* ✅ Add Start Button here */}
+          {/* Add Start Button here */}
           <button className={styles.btn} onClick={handleStart} disabled={isLoading}>
             {isLoading ? "Loading..." : "Start Game"}
           </button>
