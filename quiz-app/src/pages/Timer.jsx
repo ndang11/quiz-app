@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 export default function Timer({ duration, onTimeout }) {
-  const [secondsLeft, setSecondsLeft] = useState(duration);
+  const [timeLeft, setTimeLeft] = useState(duration);
 
+  // Reset timer when a new question loads
   useEffect(() => {
-    if (secondsLeft === 0) {
+    setTimeLeft(duration);
+  }, [duration]);
+
+  // Countdown effect
+  useEffect(() => {
+    if (timeLeft <= 0) {
       onTimeout();
       return;
     }
-    const timerId = setTimeout(() => setSecondsLeft(secondsLeft - 1), 1000);
-    return () => clearTimeout(timerId);
-  }, [secondsLeft, onTimeout]);
 
-  return <div>Time left: {secondsLeft} seconds</div>;
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft, onTimeout]);
+
+  return <p className="time"> ⏱ Time left: {timeLeft}s</p>;
 }

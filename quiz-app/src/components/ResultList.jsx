@@ -6,23 +6,27 @@ export function ResultList({ tabResponse, score, star }) {
     return he.decode(word);
   }
 
+  const totalQuestions = tabResponse.length || 10; // fallback to 10 if no data
+  const percentage = ((score / totalQuestions) * 100).toFixed(2);
+
   return (
-    <div className="card-list">
-      <div className="card-header">
-        <h2>Scored : {score} / 10</h2>
-        {score > 5 ? (
-          <h2 className="mx-2">You Won</h2>
+    <div>
+      <div>
+        <h2>Scored : {score} / {totalQuestions}</h2>
+        <h3>Percentage: {percentage}%</h3>
+        {score > totalQuestions / 2 ? (
+          <h2>You Won</h2>
         ) : (
-          <h2 className="mx-2">You Lose</h2>
+          <h2>You Lose</h2>
         )}
       </div>
-      <div className="card-body">
-        <table className="table">
+      <div>
+        <table>
           <thead>
             <tr>
-              <th scope="col">Question</th>
-              <th scope="col">Correct answer</th>
-              <th scope="col">Your answer</th>
+              <th>Question</th>
+              <th>Correct answer</th>
+              <th>Your answer</th>
             </tr>
           </thead>
           <tbody>
@@ -35,7 +39,7 @@ export function ResultList({ tabResponse, score, star }) {
             ))}
           </tbody>
         </table>
-        <div className="row-btn">
+        <div>
           <button onClick={star}>Restart</button>
         </div>
       </div>

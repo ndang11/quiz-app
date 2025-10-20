@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './pages/LandingPage';
-import ResultsPage from './pages/ResultPage';
-import QuestionPage from './pages/QuestionPage';
-import { UseData } from './context/context';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/landingpage/LandingPage";
+import ResultsPage from "./pages/ResultPage";
+import QuestionPage from "./pages/QuestionPage";
+import { UseData } from "./context/context";
+import "./App.css";
 
 function App() {
   return (
     <UseData>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route
-            path="/QuestionPage/:number"
-            element={<QuestionPage/>}
-          />
-          <Route path="/ResultPage" element={<ResultsPage />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        {/* Landing page */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Quiz questions */}
+        <Route path="/questionnaire/:number" element={<QuestionPage />} />
+
+        {/* Results page */}
+        <Route path="/results" element={<ResultsPage />} />
+      </Routes>
     </UseData>
   );
 }
