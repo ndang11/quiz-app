@@ -44,7 +44,7 @@ export function LandingCard({ isLoading }) {
               src="https://img.icons8.com/glyph-neue/64/ask-question--v1.png"
               alt="ask-question--v1"
             />
-            Welcome to my quiz app
+            Welcome To My Quiz Game
           </h1>
         </div>
 

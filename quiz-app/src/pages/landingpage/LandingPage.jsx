@@ -1,44 +1,75 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../../context/context";
 import { LandingCard } from "../../components/LandingCard";
 
-
-
 export default function LandingPage() {
   const navigate = useNavigate();
   const { setData } = useData();
+  const [loading, setLoading] = useState(false);
 
   const handleStart = async () => {
-    try {
-      const res = await fetch(
-        "https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean"
-      );
+    if (loading) return;
 
-      if (!res.ok) throw new Error("Failed to fetch questions");
+    setLoading(true);
+    try {
+      // Fetch 10 questions instead of 5
+      const url = "https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean";
+
+      if (!url || typeof url !== "string" || !url.startsWith("http")) {
+        throw new Error(`Invalid API URL detected: ${url}`);
+      }
+
+      console.log("Fetching questions from:", url);
+
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error("Too many requests — please wait a few seconds and try again.");
+        }
+        throw new Error(`Failed to fetch questions: ${res.status} ${res.statusText}`);
+      }
 
       const json = await res.json();
 
-      // Map API data into our format
-      const questions = json.results.map((q) => ({
+      if (!json || !Array.isArray(json.results) || json.results.length === 0) {
+        throw new Error("No questions returned by the API.");
+      }
+
+      const questions = json.results.map((q, i) => ({
+        id: i + 1,
         text: q.question,
-        answer: null, // store user answer later
+        correctAnswer: q.correct_answer,
+        category: q.category,
+        difficulty: q.difficulty,
+        answer: null,
       }));
 
-      setData(questions); // store in context
-      navigate("/questionnaire/1"); // start quiz
+      setData(questions);
+
+      const nextRoute = "/questionnaire/1";
+
+      if (typeof nextRoute !== "string" || !nextRoute.startsWith("/")) {
+        throw new Error(`Invalid navigation route: ${nextRoute}`);
+      }
+
+      navigate(nextRoute);
     } catch (error) {
-      console.error(error);
+      console.error("Fetch or navigation error:", error);
       alert(
-        "Failed to load questions. The API may be busy. Try again in a moment."
+        error.message.includes("Invalid URL")
+          ? "An invalid URL was used — please refresh and try again."
+          : error.message || "Something went wrong while loading questions."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <LandingCard />
+    <div className="landing-page">
+      <LandingCard onStart={handleStart} loading={loading} />
     </div>
   );
 }
