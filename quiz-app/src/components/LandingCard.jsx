@@ -18,15 +18,14 @@ export function LandingCard({ isLoading }) {
 
       const json = await res.json();
 
-      // Map API data into our format
       const questions = json.results.map((q) => ({
-        text: he.decode(q.question), // 👈 convert &quot; etc. to plain text
+        text: he.decode(q.question), 
         correct: q.correct_answer === "True",
         answer: null,
       }));
 
-      setData(questions); // store in context
-      navigate("/questionnaire/1"); // start quiz
+      setData(questions);
+      navigate("/questionnaire/1");
     } catch (error) {
       console.error(error);
       alert("Failed to load questions. Please try again in a moment.");
@@ -61,7 +60,6 @@ export function LandingCard({ isLoading }) {
             </li>
           </ol>
 
-          {/* Add Start Button here */}
           <button className={styles.btn} onClick={handleStart} disabled={isLoading}>
             {isLoading ? "Loading..." : "Start Game"}
           </button>

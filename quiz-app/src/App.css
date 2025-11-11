@@ -21,7 +21,8 @@ body {
 
 .time {
   font-size: 1.2rem;
-  margin-top: 2rem;
+  font-weight: 700;
+  margin-top: 4rem;
   color: #0e0c0c;
 }
 

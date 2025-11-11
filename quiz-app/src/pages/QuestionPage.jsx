@@ -7,7 +7,7 @@ import styles from "./questionpage.module.css";
 
 
 export default function QuestionPage() {
-  const { number } = useParams(); // question number from URL
+  const { number } = useParams();
   const questionIndex = parseInt(number, 10) - 1;
   const navigate = useNavigate();
   const { data: questions, setData } = useData();
@@ -31,17 +31,17 @@ export default function QuestionPage() {
   const question = questions[questionIndex];
 
   const handleAnswer = (answer) => {
-    if (answered) return; // prevent multiple answers
+    if (answered) return; 
     setAnswered(true);
 
-    // Save answer in context
+
     setData((prev) => {
       const updated = [...prev];
       updated[questionIndex] = { ...updated[questionIndex], answer };
       return updated;
     });
 
-    // Delay navigation slightly for UX smoothness
+    
     setTimeout(() => {
       if (questionIndex + 1 >= questions.length) {
         navigate("/results");
@@ -73,9 +73,9 @@ export default function QuestionPage() {
 
       {/* Each question has its own timer */}
       <Timer
-        key={questionIndex}  
-        duration={15}           
-        onTimeout={handleTimeout}  
+        key={questionIndex}
+        duration={15}
+        onTimeout={handleTimeout}
         questionIndex={questionIndex}
       />
     </div>
